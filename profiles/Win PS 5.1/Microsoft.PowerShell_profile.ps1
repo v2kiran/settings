@@ -3,6 +3,9 @@
 # this imports the bookmarks
 #import-folderbookmark
 
+Import-Module oh-my-posh
+Set-Theme Paradox
+
 # Goto location
 cd c:\gh
 

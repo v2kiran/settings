@@ -20,7 +20,9 @@
   "profiles": {
     "defaults": {
       // Put settings here that you want to apply to all profiles.
-      "fontFace": "Delugia Nerd Font"
+      "fontFace": "Delugia Nerd Font",
+      "antialiasingMode": "cleartype",
+      "snapOnInput": true
     },
     "list": [
       {
@@ -55,7 +57,7 @@
       {
         "guid": "{6d748e6e-a156-4188-92e0-cdea3821305b}",
         "hidden": false,
-        "source": "Windows.Terminal.PowershellCore",
+        "commandline": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
         "name": "PS7",
         "colorScheme": "Polygone"
       },
@@ -67,13 +69,13 @@
       },
       {
         "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
-        "hidden": false,
+        "hidden": true,
         "name": "Azure Cloud Shell",
         "source": "Windows.Terminal.Azure"
       },
       {
         "guid": "{a3a2e83a-884a-5379-baa8-16f193a13b21}",
-        "hidden": false,
+        "hidden": true,
         "name": "PowerShell 7 Preview",
         "source": "Windows.Terminal.PowershellCore"
       }
