@@ -1,3 +1,5 @@
+https://github.com/microsoft/terminal/blob/master/doc/cascadia/SettingsSchema.md#profilesjson-documentation
+
 ### Splitting panes
 To allow for more options when splitting panes, the splitHorizontal and splitVertical commands have been removed in favor of the new key binding format. Additionally, if you don’t provide a split direction, the Terminal will default to splitting using auto, which will split to provide the largest surface area.
 

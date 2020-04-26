@@ -1,4 +1,7 @@
 Set-Location c:\gh -ErrorAction Stop
+Import-Module oh-my-posh
+Set-Theme Paradox
+👌
 if ($env:wt_session)
 {
   #theme Cobalt2
