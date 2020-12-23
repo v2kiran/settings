@@ -1,10 +1,16 @@
-#psdefault values
-#$PSDefaultParameterValues.Add('Out-Default:OutVariable', 'Lastout')
-# this imports the bookmarks
-#import-folderbookmark
+Set-Location C:\gh\
 
+#Import-Module Poshcolor
+Import-Module -Name Terminal-Icons
 Import-Module oh-my-posh
-Set-Theme Paradox
+Set-PoshPrompt -Theme 'C:\gh\settings\themes\my-paradox.json'
 
-# Goto location
-Set-Location c:\gh
+$dc = ($env:LOGONSERVER -replace '\\\\')
+
+#psreadline
+. 'C:\gh\settings\psreadline\Sample.profile.ps1'
+
+Function Elevate
+{
+    Start-Process (Get-Process -Id $PID).path -Verb runas
+}

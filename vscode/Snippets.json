@@ -38,5 +38,239 @@
       "\\$PSCmdlet.ThrowTerminatingError(\\$ErrorRecord)"
     ],
     "description": "Throw a full terminating error."
+  },
+  "Pester - Describe block (Unit Test, Exported Function)": {
+    "prefix": "descu",
+    "body": [
+      "describe '${name}' {",
+      "",
+      "\t$$commandName = '${name}'",
+      "",
+      "\tcontext 'Help' {",
+      "\t\t",
+      "\t\t$$nativeParamNames = @(",
+      "\t\t\t'Verbose'",
+      "\t\t\t'Debug'",
+      "\t\t\t'ErrorAction'",
+      "\t\t\t'WarningAction'",
+      "\t\t\t'InformationAction'",
+      "\t\t\t'ErrorVariable'",
+      "\t\t\t'WarningVariable'",
+      "\t\t\t'InformationVariable'",
+      "\t\t\t'OutVariable'",
+      "\t\t\t'OutBuffer'",
+      "\t\t\t'PipelineVariable'",
+      "\t\t\t'Confirm'",
+      "\t\t\t'WhatIf'",
+      "\t\t)",
+      "\t\t",
+      "\t\t$$command = Get-Command -Name $$commandName",
+      "\t\t$$commandParamNames = [array]($$command.Parameters.Keys | where {$$_ -notin $$nativeParamNames})",
+      "\t\t$$help = Get-Help -Name $$commandName",
+      "\t\t$$helpParamNames = (Get-Content function:\\\\$$commandName) -split \"`n\" | where {$$_ -cmatch '\\.PARAMETER[\\\\s+|\\\\n]'} | foreach {$$_.Trim() -replace '\\.PARAMETER '}",
+      "\t\t",
+      "\t\tit 'has a SYNOPSIS defined' {",
+      "\t\t\t$$help.synopsis | should not match $$commandName",
+      "\t\t}",
+      "\t\t",
+      "\t\tit 'has at least one example' {",
+      "\t\t\t$$help.examples | should not benullorempty",
+      "\t\t}",
+      "\t\t",
+      "\t\tit 'all help parameters have a description' {",
+      "\t\t\t$$help.Parameters | where { ('Description' -in $$_.Parameter.PSObject.Properties.Name) -and (-not $$_.Parameter.Description) } | should be $$null",
+      "\t\t}",
+      "\t\t",
+      "\t\tit 'there are no help parameters that refer to non-existent command paramaters' {",
+      "\t\t\tif ($$commandParamNames) {",
+      "\t\t\t@(Compare-Object -ReferenceObject $$helpParamNames -DifferenceObject $$commandParamNames).where({",
+      "\t\t\t\t$$_.SideIndicator -eq '<='",
+      "\t\t\t}) | should benullorempty",
+      "\t\t\t}",
+      "\t\t}",
+      "\t\t",
+      "\t\tit 'all command parameters have a help parameter defined' {",
+      "\t\t\tif ($$commandParamNames) {",
+      "\t\t\t@(Compare-Object -ReferenceObject $$helpParamNames -DifferenceObject $$commandParamNames).where({",
+      "\t\t\t\t$$_.SideIndicator -eq '=>'",
+      "\t\t\t}) | should benullorempty",
+      "\t\t\t}",
+      "\t\t}",
+      "\t}",
+      "",
+      "\t#region Mocks",
+      "\tmock 'Write-Log' {",
+      "",
+      "\t} -ParameterFilter { $$EntryType -ne 'Error' }",
+      "",
+      "\tmock 'Get-CallerPreference'",
+      "\t#endregion",
+      "\t",
+      "\t$$parameterSets = @(",
+      "\t\t@{",
+      "\t\t\tTestName = ''",
+      "\t\t}",
+      "\t)",
+      "",
+      "\t$$testCases = @{",
+      "\t\tAll = $$parameterSets",
+      "\t}",
+      "",
+      "\tcontext 'Input' {",
+      "",
+      "\t}",
+      "\t",
+      "\tcontext 'Execution' {",
+      "",
+      "\t}",
+      "",
+      "\tcontext 'Output' {",
+      "",
+      "\t\t$$command = Get-Command -Name $$commandName",
+      "",
+      "\t\tit 'returns the same object type as defined in OutputType: <TestName>' -TestCases $$testCases.All {",
+      "\t\t\tparam()",
+      "",
+      "\t\t\t& $$commandName @PSBoundParameters | should beoftype $$command.OutputType.Name",
+      "",
+      "\t\t}",
+      "\t}",
+      "}"
+    ],
+    "description": "Pester - Describe block"
+  },
+  "Pester - Describe block (Unit Test, Helper Function)": {
+    "prefix": "descuh",
+    "body": [
+      "describe '${name}' {",
+      "",
+      "\t$$commandName = '${name}'",
+      "",
+      "\t$$parameterSets = @(",
+      "\t\t@{",
+      "\t\t\tTestName = ''",
+      "\t\t}",
+      "\t)",
+      "",
+      "\t$$testCases = @{",
+      "\t\tAll = $$parameterSets",
+      "\t}",
+      "",
+      "\tcontext 'Input' {",
+      "",
+      "\t}",
+      "\t",
+      "\tcontext 'Execution' {",
+      "",
+      "\t}",
+      "",
+      "\tcontext 'Output' {",
+      "",
+      "\t\t$$command = Get-Command -Name $$commandName",
+      "",
+      "\t\tit 'returns the same object type as defined in OutputType: <TestName>' -TestCases $$testCases.All {",
+      "\t\t\tparam()",
+      "\t\t\t& $$commandName @PSBoundParameters | should beoftype $$command.OutputType.Name",
+      "\t\t}",
+      "\t}",
+      "}"
+    ],
+    "description": "Pester - Describe block"
+  },
+  "Pester Test Case": {
+    "prefix": "tc",
+    "body": [
+      "${Name} = $$parameterSets.where({$$_.ContainsKey($1)})"
+    ],
+    "description": "Pester Test Case"
+  },
+  "Assert-MockCalled": {
+    "prefix": "assm",
+    "body": [
+      "$$assMParams = @{",
+      "\tCommandName = '${command}'",
+      "\tTimes = 1",
+      "\tExactly = $$true",
+      "\tScope = 'It'",
+      "\tParameterFilter = {${paramName} -eq ${paramValue} }",
+      "}",
+      "Assert-MockCalled @assMParams"
+    ],
+    "description": "Assert-MockCalled"
+  },
+  "Pester - It block": {
+    "prefix": "it",
+    "body": [
+      "it '${name}: <TestName>' -TestCases $$testCases.All {",
+      "\tparam($1)",
+      "",
+      "\t$$result = & $$commandName @PSBoundParameters",
+      "}"
+    ],
+    "description": "Pester - It block"
+  },
+  "Pester - It block (Throws Exception)": {
+    "prefix": "itexc",
+    "body": [
+      "it 'throws an exception when ${name}: <TestName>' -TestCases $$testCases.All {",
+      "\tparam($1)",
+      "",
+      "\t$$params = @{} + $$PSBoundParameters",
+      "\t{ & $$commandName @params } | should throw ",
+      "}"
+    ],
+    "description": "Pester - It block"
+  },
+  "Pester - It block (Assertion)": {
+    "prefix": "itass",
+    "body": [
+      "it 'should pass the expected parameters to ${name}: <TestName>' -TestCases $$testCases.All {",
+      "\tparam($1)",
+      "",
+      "\t$$null = & $$commandName @PSBoundParameters",
+      "",
+      "\t$$assMParams = @{",
+      "\t\tCommandName = '${name}'",
+      "\t\tTimes = 1",
+      "\t\tExactly = $$true",
+      "\t\tScope = 'It'",
+      "\t\tParameterFilter = { $2 }",
+      "\t}",
+      "\tAssert-MockCalled @assMParams",
+      "}"
+    ],
+    "description": "Pester - It block"
+  },
+  "Pester - mock null": {
+    "prefix": "mockn",
+    "body": [
+      "mock '${$$command}'$1"
+    ],
+    "description": "Pester - mock null"
+  },
+  "Pester - mock $true": {
+    "prefix": "mocktrue",
+    "body": [
+      "mock '${$$command}'$1 {"
+			"\t$$true"
+			"}"
+    ],
+    "description": "Pester - mock $true"
+  },
+  "Pester - mock $false": {
+    "prefix": "mockfalse",
+    "body": [
+      "mock '${$$command}'$1 {"
+			"\t$$false"
+			"}"
+    ],
+    "description": "Pester - mock $false"
+  },
+  "Pester - It block exception thrown": {
+    "prefix": "itexception",
+    "body": [
+      ""
+    ],
+    "description": "Pester - It block exception thrown"
   }
 }

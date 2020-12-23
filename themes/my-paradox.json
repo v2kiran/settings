@@ -1,0 +1,91 @@
+{
+    "blocks": [
+        {
+            "type": "prompt",
+            "alignment": "left",
+            "segments": [
+                {
+                    "type": "root",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "foreground": "#100e23",
+                    "background": "#ffe9aa"
+                },
+                {
+                    "type": "session",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "foreground": "#100e23",
+                    "background": "#ffffff"
+                },
+                {
+                    "type": "path",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "foreground": "#ffffff",
+                    "background": "#0077c2",
+                    "properties": {
+                        "home_icon": "\uF7DB",
+                        "prefix": "  ",
+                        "folder_icon": "\uF115",
+                        "folder_separator_icon": "\uE0B1",
+                        "style": "short"
+                    }
+                },
+                {
+                    "type": "git",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "invert_powerline": false,
+                    "foreground": "#193549",
+                    "background": "#fffb38",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": {
+                        "display_stash_count": true,
+                        "display_upstream_icon": true
+                    }
+                },
+                {
+                    "type": "python",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "foreground": "#100e23",
+                    "background": "#906cff",
+                    "properties": {
+                        "prefix": " \uE235 "
+                    }
+                },
+                {
+                    "type": "exit",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "foreground": "#ffffff",
+                    "background": "#ff8080",
+                    "properties": {
+                        "prefix": " \uE20F"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "newline"
+        },
+        {
+            "type": "prompt",
+            "alignment": "left",
+            "segments": [
+                {
+                    "type": "text",
+                    "style": "plain",
+                    "foreground": "#007ACC",
+                    "properties": {
+                        "prefix": "",
+                        "text": "\u276F"
+                    }
+                }
+            ]
+        }
+    ],
+    "final_space": false
+}
