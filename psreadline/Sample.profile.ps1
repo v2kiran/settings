@@ -260,41 +260,12 @@ Set-PSReadLineKeyHandler -Key '"', "'" `
     [Microsoft.PowerShell.PSConsoleReadLine]::Insert($quote)
 }
 
-Set-PSReadLineKeyHandler -Key '(', '{', '[' `
-    -BriefDescription InsertPairedBraces `
-    -LongDescription "Insert matching braces" `
-    -ScriptBlock {
-    param($key, $arg)
 
-    $closeChar = switch ($key.KeyChar)
-    {
-        <#case#> '(' { [char]')'; break }
-        <#case#> '{' { [char]'}'; break }
-        <#case#> '[' { [char]']'; break }
-    }
 
-    $selectionStart = $null
-    $selectionLength = $null
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetSelectionState([ref]$selectionStart, [ref]$selectionLength)
 
-    $line = $null
-    $cursor = $null
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
 
-    if ($selectionStart -ne -1)
-    {
-        # Text is selected, wrap it in brackets
-        [Microsoft.PowerShell.PSConsoleReadLine]::Replace($selectionStart, $selectionLength, $key.KeyChar + $line.SubString($selectionStart, $selectionLength) + $closeChar)
-        [Microsoft.PowerShell.PSConsoleReadLine]::SetCursorPosition($selectionStart + $selectionLength + 2)
-    }
-    else
-    {
-        # No text is selected, insert a pair
-        [Microsoft.PowerShell.PSConsoleReadLine]::Insert("$($key.KeyChar)$closeChar")
-        [Microsoft.PowerShell.PSConsoleReadLine]::SetCursorPosition($cursor + 1)
-    }
-}
 
+<#
 Set-PSReadLineKeyHandler -Key ')', ']', '}' `
     -BriefDescription SmartCloseBraces `
     -LongDescription "Insert closing brace or skip" `
@@ -314,7 +285,7 @@ Set-PSReadLineKeyHandler -Key ')', ']', '}' `
         [Microsoft.PowerShell.PSConsoleReadLine]::Insert("$($key.KeyChar)")
     }
 }
-
+#>
 Set-PSReadLineKeyHandler -Key Backspace `
     -BriefDescription SmartBackspace `
     -LongDescription "Delete previous character or matching quotes/parens/braces" `
@@ -353,22 +324,7 @@ Set-PSReadLineKeyHandler -Key Backspace `
 
 #endregion Smart Insert/Delete
 
-# Sometimes you enter a command but realize you forgot to do something else first.
-# This binding will let you save that command in the history so you can recall it,
-# but it doesn't actually execute.  It also clears the line with RevertLine so the
-# undo stack is reset - though redo will still reconstruct the command line.
-Set-PSReadLineKeyHandler -Key Alt+w `
-    -BriefDescription SaveInHistory `
-    -LongDescription "Save current line in history but do not execute" `
-    -ScriptBlock {
-    param($key, $arg)
 
-    $line = $null
-    $cursor = $null
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
-    [Microsoft.PowerShell.PSConsoleReadLine]::AddToHistory($line)
-    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-}
 
 # Insert text from the clipboard as a here string
 Set-PSReadLineKeyHandler -Key Ctrl+V `
@@ -522,44 +478,6 @@ Set-PSReadLineKeyHandler -Key "Alt+%" `
     }
 }
 
-# F1 for help on the command line - naturally
-Set-PSReadLineKeyHandler -Key F1 `
-    -BriefDescription CommandHelp `
-    -LongDescription "Open the help window for the current command" `
-    -ScriptBlock {
-    param($key, $arg)
-
-    $ast = $null
-    $tokens = $null
-    $errors = $null
-    $cursor = $null
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$ast, [ref]$tokens, [ref]$errors, [ref]$cursor)
-
-    $commandAst = $ast.FindAll( {
-            $node = $args[0]
-            $node -is [CommandAst] -and
-            $node.Extent.StartOffset -le $cursor -and
-            $node.Extent.EndOffset -ge $cursor
-        }, $true) | Select-Object -Last 1
-
-    if ($commandAst -ne $null)
-    {
-        $commandName = $commandAst.GetCommandName()
-        if ($commandName -ne $null)
-        {
-            $command = $ExecutionContext.InvokeCommand.GetCommand($commandName, 'All')
-            if ($command -is [AliasInfo])
-            {
-                $commandName = $command.ResolvedCommandName
-            }
-
-            if ($commandName -ne $null)
-            {
-                Get-Help $commandName -ShowWindow
-            }
-        }
-    }
-}
 
 
 #
@@ -603,9 +521,9 @@ Set-PSReadLineKeyHandler -Key Alt+j `
 
     $global:PSReadLineMarks.GetEnumerator() | ForEach-Object {
         [PSCustomObject]@{Key = $_.Key; Dir = $_.Value } } |
-    Format-Table -AutoSize | Out-Host
+        Format-Table -AutoSize | Out-Host
 
-[Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+    [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
 }
 
 Set-PSReadLineOption -CommandValidationHandler {
