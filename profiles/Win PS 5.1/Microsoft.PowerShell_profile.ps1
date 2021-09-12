@@ -3,7 +3,7 @@ Set-Location C:\gh\
 #Import-Module Poshcolor
 Import-Module -Name Terminal-Icons
 Import-Module oh-my-posh
-Import-Module c:\gh\misc
+Import-Module c:\gh\misc -DisableNameChecking
 Set-PoshPrompt -Theme 'C:\gh\settings\themes\my-paradox.json'
 
 $dc = ($env:LOGONSERVER -replace '\\\\')
