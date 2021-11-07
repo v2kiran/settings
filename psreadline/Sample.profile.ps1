@@ -286,6 +286,9 @@ Set-PSReadLineKeyHandler -Key ')', ']', '}' `
     }
 }
 #>
+
+<#
+#region backspace
 Set-PSReadLineKeyHandler -Key Backspace `
     -BriefDescription SmartBackspace `
     -LongDescription "Delete previous character or matching quotes/parens/braces" `
@@ -303,11 +306,11 @@ Set-PSReadLineKeyHandler -Key Backspace `
         {
             switch ($line[$cursor])
             {
-                <#case#> '"' { $toMatch = '"'; break }
-                <#case#> "'" { $toMatch = "'"; break }
-                <#case#> ')' { $toMatch = '('; break }
-                <#case#> ']' { $toMatch = '['; break }
-                <#case#> '}' { $toMatch = '{'; break }
+                '"' { $toMatch = '"'; break }
+                "'" { $toMatch = "'"; break }
+                ')' { $toMatch = '('; break }
+                ']' { $toMatch = '['; break }
+                '}' { $toMatch = '{'; break }
             }
         }
 
@@ -321,6 +324,10 @@ Set-PSReadLineKeyHandler -Key Backspace `
         }
     }
 }
+#endregion backspace
+#>
+
+
 
 #endregion Smart Insert/Delete
 
@@ -554,7 +561,7 @@ Set-PSReadLineOption -CommandValidationHandler {
 Set-PSReadLineOption -AddToHistoryHandler {
     param([string]$line)
 
-    $sensitive = "password|asplaintext|token|key|secret|credential"
+    $sensitive = "password|asplaintext|token|key|credential"
     return ($line -notmatch $sensitive)
 }
 
@@ -564,3 +571,7 @@ Set-PSReadLineKeyHandler -Key Ctrl+Alt+c -BriefDescription "OpenInCode" -ScriptB
     [Microsoft.PowerShell.PSConsoleReadLine]::Insert("code .")
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }
+
+Set-PSReadLineOption -PredictionSource History
+Set-PSReadLineOption -Colors @{ InlinePrediction = "$([char]0x1b)[36;7;238m"}
+Set-PSReadLineKeyHandler -Chord "Ctrl+f" -Function ForwardWord
