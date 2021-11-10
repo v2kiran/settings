@@ -9,20 +9,24 @@ Set-PSReadLineOption -Colors @{
   member    = '#FF7F50' # coral
   default   = 'DarkGreen'
 }
+$PSStyle.Formatting.TableHeader = $PSStyle.Foreground.FromRgb('#ccc82c')
+$PSStyle.Formatting.FormatAccent = $PSStyle.Foreground.FromRgb('#ccc82c')
 
+$PSDefaultParameterValues.Add('Out-Default:OutVariable', 'Lastout')
 
-Set-Location C:\gh\
 
 #Import-Module Poshcolor
+Import-Module EditorServicesCommandSuite
+Import-EditorCommand -Module EditorServicesCommandSuite
+
 Import-Module -Name Terminal-Icons
 Import-Module oh-my-posh
-Import-Module c:\gh\misc
-Set-PoshPrompt -Theme 'C:\Users\Kiran\OneDrive\GitHub\settings\themes\my-paradox.json'
+Import-Module c:\gh\misc -Force -DisableNameChecking
+Set-PoshPrompt -Theme 'C:\gh\settings\themes\my-paradox.json'
 
-$dc = ($env:LOGONSERVER -replace '\\\\')
 
 #psreadline
-#. 'C:\gh\settings\psreadline\Sample.profile.ps1'
+. 'C:\gh\settings\psreadline\Sample.profile.ps1'
 
 Function Elevate
 {
