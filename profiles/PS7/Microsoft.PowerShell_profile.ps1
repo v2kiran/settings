@@ -1,6 +1,16 @@
 Set-Location C:\gh\
-$PSDefaultParameterValues.Add('Out-Default:OutVariable', 'Lastout')
+#$PSDefaultParameterValues.Add('Out-Default:OutVariable', 'Lastout')
 
+# 3. Set Format enumeration olimit
+$FormatEnumerationLimit = 99
+
+# 4. Set some command defaults
+$PSDefaultParameterValues = @{
+    '*:autosize'              = $true
+    'Receive-Job:keep'        = $true
+    '*:Wrap'                  = $true
+    'Out-Default:OutVariable' = 'Lastout'
+}
 
 #Import-Module Poshcolor
 Import-Module -Name Terminal-Icons

@@ -1,7 +1,7 @@
 using namespace System.Management.Automation
 using namespace System.Management.Automation.Language
 
-Import-Module PSReadLine
+#Import-Module PSReadLine
 
 #colors
 #Set-PSReadLineOption -Colors @{Parameter = "Magenta"; Operator = "Magenta"; Type = "Magenta" }
