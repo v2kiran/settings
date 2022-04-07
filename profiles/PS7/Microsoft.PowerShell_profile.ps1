@@ -44,3 +44,25 @@ Set-PSReadLineOption -PredictionViewStyle ListView
 
 Set-Alias tig 'C:\Program Files\Git\usr\bin\tig.exe'
 Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
+if ((Get-Command nvim -ErrorAction Ignore))
+{
+    if (-not (Get-Command vim -ErrorAction Ignore))
+    {
+        Set-Alias vim nvim
+    }
+    if (-not (Get-Command vi -ErrorAction Ignore))
+    {
+        Set-Alias vi vim
+    }
+    if (-not (Get-Command gvim -ErrorAction Ignore))
+    {
+        Set-Alias gvim nvim-qt
+    }
+}
+
+<#endregion
+psfzf
+Ctrl+T searches the paths below the current directory and inserts the selected path
+Alt+C does the same, but automatically changes the current directory to the selected one upon confirmation.
+cd \  press tab to autocomplete directories
+#>
