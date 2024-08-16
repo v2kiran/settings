@@ -20,7 +20,9 @@
   "profiles": {
     "defaults": {
       // Put settings here that you want to apply to all profiles.
-      "fontFace": "Delugia Nerd Font",
+      "font": {
+        "face": "Delugia"
+      },
       "antialiasingMode": "cleartype",
       "snapOnInput": true
     },

@@ -17,7 +17,7 @@ Import-Module -Name Terminal-Icons
 #Import-Module c:\gh\misc -Force
 #psreadline
 
-Import-Module oh-my-posh
+
 $omp_config = 'c:\gh\settings\config\takuya.omp.json'
 oh-my-posh --init --shell pwsh --config $omp_config | Invoke-Expression
 #Set-PoshPrompt -Theme 'C:\Users\Kiran\OneDrive\GitHub\settings\themes\my-paradox.json'
