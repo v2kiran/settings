@@ -2,67 +2,101 @@ Set-Location C:\gh\
 
 #Import-Module Poshcolor
 Import-Module -Name Terminal-Icons
-
 #Import-Module c:\gh\misc -Force -DisableNameChecking
-#Set-PoshPrompt -Theme 'C:\gh\settings\themes\my-paradox.json'
+
 
 # 3. Set Format enumeration olimit
 $FormatEnumerationLimit = 99
 
 # 4. Set some command defaults
 $PSDefaultParameterValues = @{
-    '*:autosize'              = $true
-    'Receive-Job:keep'        = $true
-    '*:Wrap'                  = $true
-    'Out-Default:OutVariable' = 'Lastout'
+  '*:autosize'              = $true
+  'Receive-Job:keep'        = $true
+  '*:Wrap'                  = $true
+  'Out-Default:OutVariable' = 'Lastout'
 }
 
-
-$omp_config = 'c:\gh\settings\config\takuya.omp.json'
+Write-Verbose 'Configuring ps prompt'
+$omp_config = 'c:\gh\settings\config\takuya-1.omp.json'
 oh-my-posh --init --shell pwsh --config $omp_config | Invoke-Expression
-
-if (Test-Path \\archie-ds\winroot)
-{
-    New-PSDrive -Name Z -PSProvider FileSystem -Root \\archie-ds\winroot -Persist -ErrorAction SilentlyContinue
-}
+Write-Verbose 'Done...Configuring ps prompt'
 
 
 $PSStyle.Formatting.TableHeader = $PSStyle.Foreground.BrightYellow
 $PSStyle.Formatting.FormatAccent = $PSStyle.Foreground.BrightYellow
 
+Write-Verbose 'configure psreadline'
 
 #psreadline
 . 'C:\gh\settings\psreadline\Sample.profile.ps1'
+Write-Verbose 'dONE...configure psreadline'
 
 Function Elevate
 {
-    Start-Process (Get-Process -Id $PID).path -Verb runas
+  Start-Process (Get-Process -Id $PID).path -Verb runas
 }
+Set-PSReadLineOption -PredictionSource HistoryAndPlugin -ErrorAction SilentlyContinue
+Set-PSReadLineOption -PredictionViewStyle ListView -ErrorAction SilentlyContinue
+#Import-Module ugit
+Import-Module posh
+Import-Module -Name Microsoft.WinGet.CommandNotFound
+
+# command predictors
 Import-Module Az.Tools.Predictor
-Set-PSReadLineOption -PredictionSource HistoryAndPlugin
-Set-PSReadLineOption -PredictionViewStyle ListView
+Import-Module CompletionPredictor
+Import-Module PowerType
+Enable-PowerType
 
-Set-Alias tig 'C:\Program Files\Git\usr\bin\tig.exe'
-Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
-if ((Get-Command nvim -ErrorAction Ignore))
+#Set-Alias tig 'C:\Program Files\Git\usr\bin\tig.exe'
+#Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
+# Override PSReadLine's history search
+#Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
+
+# Override default tab completion
+#Set-PSReadLineKeyHandler -Key F3 -ScriptBlock { Invoke-FzfTabCompletion }
+
+
+function tfauth
 {
-    if (-not (Get-Command vim -ErrorAction Ignore))
-    {
-        Set-Alias vim nvim
-    }
-    if (-not (Get-Command vi -ErrorAction Ignore))
-    {
-        Set-Alias vi vim
-    }
-    if (-not (Get-Command gvim -ErrorAction Ignore))
-    {
-        Set-Alias gvim nvim-qt
-    }
+  $creds = cms spn-azure-devops-001 -Value
+  $tenantId = $creds.TenantID
+  $clientId = $creds.ClientID
+  $subscriptionId = $creds.SubscriptionID
+
+  $tfstg_access_key = cms tfstg_access_key -Value
+
+  # storing the credentials as environment variables
+  New-Item -Path 'Env:\' -Name ARM_CLIENT_ID -Value $clientId -Force | Out-Null
+  New-Item -Path 'Env:\' -Name ARM_CLIENT_SECRET -Value (cms spn-azure-devops-001 -Value)['Secret'] -Force | Out-Null
+  New-Item -Path 'Env:\' -Name ARM_SUBSCRIPTION_ID -Value $subscriptionId -Force | Out-Null
+  New-Item -Path 'Env:\' -Name ARM_TENANT_ID -Value $tenantId -Force | Out-Null
+  New-Item -Path 'Env:\' -Name ARM_ACCESS_KEY -Value $tfstg_access_key -Force | Out-Null
 }
 
-<#endregion
-psfzf
-Ctrl+T searches the paths below the current directory and inserts the selected path
-Alt+C does the same, but automatically changes the current directory to the selected one upon confirmation.
-cd \  press tab to autocomplete directories
-#>
+function azauth
+{
+  $creds = cms spn-azure-devops-001 -Value
+  $tenantId = $creds.TenantID
+  $clientId = $creds.ClientID
+
+  $SecuredPassword = (cms spn-azure-devops-001 -Value)['Secret'] | ConvertTo-SecureString -AsPlainText -Force
+  $Credential = [PSCredential]::new($clientId, $SecuredPassword)
+  Connect-AzAccount -ServicePrincipal -TenantId $tenantId -Credential $Credential
+
+  # az login
+  az login --service-principal -u $clientId -p (cms spn-azure-devops-001 -Value)['Secret'] --tenant $tenantId
+
+}
+
+function download-pwsh {
+  $path = 'C:\Users\Kiran\downloads\Apps'
+  Push-Location
+  Set-Location $path
+  Get-PSReleaseAsset -Family Windows -Only64Bit -Format zip |
+    Save-PSReleaseAsset -Path $path -Passthru |
+    Expand-Archive
+  Pop-Location
+}
+
+function get-quotedstring { Write-Host "wrap '"' '"' | join ','" }
+[console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()

@@ -574,7 +574,7 @@ Set-PSReadLineKeyHandler -Key Ctrl+Alt+c -BriefDescription 'OpenInCode' -ScriptB
 
 
 ## version 2.1.0
-Set-PSReadLineOption -PredictionSource History
+#Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineOption -Colors @{ InlinePrediction = "$([char]0x1b)[36;7;238m" }
 Set-PSReadLineKeyHandler -Chord 'Ctrl+f' -Function ForwardWord
 
