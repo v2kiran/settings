@@ -33,7 +33,7 @@ Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
 #Import-Module Poshcolor
 Import-Module EditorServicesCommandSuite
 Import-EditorCommand -Module EditorServicesCommandSuite
-#Import-Module CompletionPredictor
+Import-Module CompletionPredictor
 Import-Module PowerType
 Enable-PowerType
 Import-Module psutil
@@ -89,5 +89,4 @@ oh-my-posh --init --shell pwsh --config $omp_config | Invoke-Expression
 #Set-PoshPrompt -Theme 'C:\Users\Kiran\OneDrive\GitHub\settings\themes\my-paradox.json'
 
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin
-
 [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
