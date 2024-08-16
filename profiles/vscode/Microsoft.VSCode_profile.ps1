@@ -72,14 +72,28 @@ function azauth
 
 }
 
-function download-pwsh {
-  $path = 'C:\Users\Kiran\downloads\Apps'
-  Push-Location
-  Set-Location $path
-  Get-PSReleaseAsset -Family Windows -Only64Bit -Format zip |
-    Save-PSReleaseAsset -Path $path -Passthru |
-    Expand-Archive
-  Pop-Location
+function download-pwsh
+{
+
+  [System.Management.Automation.SemanticVersion]$online_version = (Get-PSReleaseAsset -Family Windows -Only64Bit)[0] |
+    Select-String -Pattern '\d{1}\.\d{1}\.\d{1}' |
+    Select-Object -expand matches |
+    Select-Object -ExpandProperty value
+  $installed_version = $PSVersionTable.PSVersion
+  if ($online_version -gt $installed_version)
+  {
+    $path = 'C:\Users\Kiran\downloads\Apps'
+    Push-Location
+    Set-Location $path
+    Get-PSReleaseAsset -Family Windows -Only64Bit -Format zip |
+      Save-PSReleaseAsset -Path $path -Passthru |
+      Expand-Archive
+    Pop-Location
+  }
+  else
+  {
+    Write-Verbose 'you already have the latest version of pwsh' -Verbose
+  }
 }
 
 
