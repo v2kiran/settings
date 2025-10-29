@@ -9,28 +9,12 @@ $PSDefaultParameterValues = @{
 }
 
 
-Set-PSReadLineOption -Colors @{
-  Parameter = 'DarkCyan'     # cyan - #20B2AA
-  Command   = '#FFD700'
-  Type      = 'DarkCyan'
-  Variable  = '#FF69B4' # hot pink
-  Number    = '#EEE8AA'
-  Operator  = 'white'
-  String    = "$([char]0x1b)[38;5;100m"
-  member    = '#FF7F50' # coral
-  default   = 'DarkGreen'
-}
-$PSStyle.Formatting.TableHeader = $PSStyle.Foreground.FromRgb('#ccc82c')
-$PSStyle.Formatting.FormatAccent = $PSStyle.Foreground.FromRgb('#ccc82c')
-
-Set-PSReadLineOption -PredictionSource HistoryAndPlugin
-Set-PSReadLineOption -PredictionViewStyle ListView
-
 Set-Alias tig 'C:\Program Files\Git\usr\bin\tig.exe'
 Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
+set-alias -value psutil\write-psuknowledge -name note
 
 
-#Import-Module Poshcolor
+# import modules
 Import-Module EditorServicesCommandSuite
 Import-EditorCommand -Module EditorServicesCommandSuite
 Import-Module CompletionPredictor
@@ -38,6 +22,7 @@ Import-Module PowerType
 Enable-PowerType
 Import-Module psutil
 Import-Module Posh
+
 
 function tfauth
 {
@@ -72,35 +57,58 @@ function azauth
 
 }
 
-function download-pwsh
+# 1password
+function New-Password
 {
-
-  [System.Management.Automation.SemanticVersion]$online_version = (Get-PSReleaseAsset -Family Windows -Only64Bit)[0] |
-    Select-String -Pattern '\d{1}\.\d{1}\.\d{1}' |
-    Select-Object -expand matches |
-    Select-Object -ExpandProperty value
-  $installed_version = $PSVersionTable.PSVersion
-  if ($online_version -gt $installed_version)
-  {
-    $path = 'C:\Users\Kiran\downloads\Apps'
-    Push-Location
-    Set-Location $path
-    Get-PSReleaseAsset -Family Windows -Only64Bit -Format zip |
-      Save-PSReleaseAsset -Path $path -Passthru |
-      Expand-Archive
-    Pop-Location
-  }
-  else
-  {
-    Write-Verbose 'you already have the latest version of pwsh' -Verbose
-  }
+    (op item create --category password --generate-password=18,letters,digits,symbols --dry-run --format json | ConvertFrom-Json).fields.value
 }
 
+function download-pwsh {
+  $path = 'C:\Users\Kiran\downloads\Apps'
+  Push-Location
+  Set-Location $path
+  Get-PSReleaseAsset -Family Windows -Only64Bit -Format zip -Verbose |
+    Save-PSReleaseAsset -Path $path -Passthru |
+    Expand-Archive
+  Pop-Location
+}
 
-#Import-Module c:\gh\misc -Force -DisableNameChecking
+# kubernetes autocomplete
+kubectl completion powershell | out-string | invoke-expression
+Set-Alias k 'kubectl'
+function SetNamespace {
+  param(
+  [string]$namespace = 'default'
+  )
+  kubectl config set-context --current --namespace $namespace
+  }
+Set-Alias kn SetNamespace
+
+
+
+
+# oh my posh
 $omp_config = 'c:\gh\settings\config\takuya-vscode.omp.json'
 oh-my-posh --init --shell pwsh --config $omp_config | Invoke-Expression
-#Set-PoshPrompt -Theme 'C:\Users\Kiran\OneDrive\GitHub\settings\themes\my-paradox.json'
 
+
+# Psreadline Options
+Set-PSReadLineOption -PredictionViewStyle ListView
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+
+Set-PSReadLineOption -Colors @{
+  Parameter = 'DarkCyan'     # cyan - #20B2AA
+  Command   = '#FFD700'
+  Type      = 'DarkCyan'
+  Variable  = '#FF69B4' # hot pink
+  Number    = '#EEE8AA'
+  Operator  = 'white'
+  String    = "$([char]0x1b)[38;5;100m"
+  member    = '#FF7F50' # coral
+  default   = 'DarkGreen'
+}
+$PSStyle.Formatting.TableHeader = $PSStyle.Foreground.FromRgb('#ccc82c')
+$PSStyle.Formatting.FormatAccent = $PSStyle.Foreground.FromRgb('#ccc82c')
+
+# Set encoding for console
 [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()

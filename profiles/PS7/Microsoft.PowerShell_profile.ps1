@@ -4,6 +4,8 @@ Set-Location C:\gh\
 Import-Module -Name Terminal-Icons
 #Import-Module c:\gh\misc -Force -DisableNameChecking
 
+# Aliases
+set-alias -value psutil\write-psuknowledge -name note
 
 # 3. Set Format enumeration olimit
 $FormatEnumerationLimit = 99
@@ -39,7 +41,6 @@ Set-PSReadLineOption -PredictionSource HistoryAndPlugin -ErrorAction SilentlyCon
 Set-PSReadLineOption -PredictionViewStyle ListView -ErrorAction SilentlyContinue
 #Import-Module ugit
 Import-Module posh
-Import-Module -Name Microsoft.WinGet.CommandNotFound
 
 # command predictors
 Import-Module Az.Tools.Predictor
@@ -97,6 +98,22 @@ function download-pwsh {
     Expand-Archive
   Pop-Location
 }
+
+function New-Password
+{
+    (op item create --category password --generate-password=18,letters,digits,symbols --dry-run --format json | ConvertFrom-Json).fields.value
+}
+# kubernetes autocomplete
+kubectl completion powershell | out-string | invoke-expression
+Set-Alias k 'kubectl'
+Set-Alias kx 'kubectl exec -it'
+function SetNamespace {
+  param(
+  [string]$namespace = 'default'
+  )
+  kubectl config set-context --current --namespace $namespace
+  }
+Set-Alias kn SetNamespace
 
 function get-quotedstring { Write-Host "wrap '"' '"' | join ','" }
 [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
