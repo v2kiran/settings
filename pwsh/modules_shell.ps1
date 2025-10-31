@@ -1,56 +1,56 @@
-Set-Psrepository -Name Psgallery  -InstallationPolicy Trusted
+Set-PSResourceRepository -Name PSGallery -Trusted 
 
-Install-Module -Name Packagemanagement -force -Repo Psgallery -Scope CurrentUser 
-Install-Module -Name PowerShellGet -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name PSSecret -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name PSReadline  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name EditorServicesCommandSuite -force -Repo Psgallery -Scope CurrentUser
-#Install-Module -Name Pester -force -Repo Psgallery -Scope CurrentUser -req 4.10.1
-Install-Module -Name Pester -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name InvokeBuild -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name WindowsConsoleFonts -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name PowerShellBooks -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name jit-tree -force -Repo Psgallery -allowprerelease -Scope CurrentUser
-Install-Module -Name PowerHistory  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name Ezout -force -Repo Psgallery -Scope CurrentUser -allowclo
-Install-Module -Name PSColor -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name posh-git -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name PSScriptTools -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name EnvironmentVariableCmdlet -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name Native -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name GetNetStat -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name EncodingAnalyzer  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name ParameterCache -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name ReallySimpleDatabase  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name Dynpar  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name PSNotebook  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name PSMath  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name DataQuery  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name HorkerTemplateEngine -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name Indented.Net.Ip -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name PoshNmap -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name PSFzf  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name completionpredictor  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name Yayaml -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name pstcpip -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name TabExpansion++ -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name StageCoder -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name PSGraph -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name Posh -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name Z -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name MaintainModule -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name SecretManagement.1Password -force -Repo Psgallery -Scope CurrentUser
+Save-PSResource -Name PSSecret  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name PSReadline   -Repo Psgallery -Prerelease -path $home\psmodules
+Save-PSResource -Name EditorServicesCommandSuite  -Repo Psgallery  -path $home\psmodules
+#Save-PSResource -Name Pester  -Repo Psgallery  -req 4.10.1 -path $home\psmodules
+Save-PSResource -Name Pester  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name InvokeBuild  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name WindowsConsoleFonts  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name PowerShellBooks  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name jit-tree  -Repo Psgallery -prerelease  -path $home\psmodules
+Save-PSResource -Name PowerHistory   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name Ezout  -Repo Psgallery -path $home\psmodules
+Save-PSResource -Name PSColor  -Repo Psgallery  -path $home\psmodules
+#Save-PSResource -Name posh-git  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name PSScriptTools  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name EnvironmentVariableCmdlet  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name Native  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name GetNetStat  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name EncodingAnalyzer   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name ParameterCache  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name ReallySimpleDatabase   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name Dynpar   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name PSNotebook   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name PSMath   -Repo Psgallery  -path $home\psmodules
+#Save-PSResource -Name DataQuery   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name HorkerTemplateEngine  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name Indented.Net.Ip  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name PoshNmap  -Repo Psgallery  -path $home\psmodules
+#Save-PSResource -Name PSFzf   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name completionpredictor   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name Yayaml  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name pstcpip  -Repo Psgallery  -path $home\psmodules
+#Save-PSResource -Name TabExpansion++  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name StageCoder  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name PSGraph  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name Posh  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name Z  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name MaintainModule  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name SecretManagement.1Password  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  JustinGrote.Microsoft.Graph.Extensions  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  psnotes   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  psdates   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  UsefulArgumentCompleters   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  Microsoft.PowerShell.whatsnew   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  OpenSSL   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  Sampler   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  Fsharp  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  ModuleBuild  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name  ModuleBuilder  -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name Microsoft.PowerShell.SecretManagement   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name posh   -Repo Psgallery  -path $home\psmodules
 
-Install-Module -Name  JustinGrote.Microsoft.Graph.Extensions -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name  psnotes  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name  psdates  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name  UsefulArgumentCompleters  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name  Microsoft.PowerShell.whatsnew  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name  OpenSSL  -force -Repo Psgallery -Scope CurrentUser -AllowClobber
-Install-Module -Name  Sampler  -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name  Fsharp -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name  ModuleBuild -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name  ModuleBuilder -force -Repo Psgallery -Scope CurrentUser
-Install-Module -Name Microsoft.PowerShell.SecretManagement  -force -Repo Psgallery -Scope CurrentUser
-
-Save-PSResource -Name some -Path $home\psmodules 
+Save-PSResource -Name psutil   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name powertype   -Repo Psgallery  -path $home\psmodules
+Save-PSResource -Name Terminal-Icons   -Repo Psgallery  -path $home\psmodules

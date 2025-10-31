@@ -1,7 +1,4 @@
 $env:PSModulePath = $env:PSModulePath + ";$home\psmodules"
-Set-Location 'C:\Users\Kiran.K.Reddy2\OneDrive - Shell\'
-
-
 
 # 3. Set Format enumeration olimit
 $FormatEnumerationLimit = 99
@@ -15,7 +12,7 @@ $PSDefaultParameterValues = @{
 }
 
 
-$omp_config = 'C:\Users\Kiran.K.Reddy2\OneDrive - Shell\Github\settings\config\takuya1.omp.json'
+$omp_config = 'C:\Users\Kiran.Reddy6\OneDrive - Shell\gh\personal\settings\config\takuya-1.omp.json'
 oh-my-posh --init --shell pwsh --config $omp_config | Invoke-Expression
 
 
@@ -35,7 +32,7 @@ Import-Module -Name Terminal-Icons
 #Import-Module Az.Tools.Predictor
 Import-Module CompletionPredictor
 import-module posh
-#import-module psutil
+import-module psutil
 #import-module ugit
 Import-Module PowerType
 Enable-PowerType
@@ -43,62 +40,11 @@ Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Set-PSReadLineOption -PredictionViewStyle ListView
 
 
-function azloginshell
+function New-Password
 {
-    param(
-        # Parameter help description
-        [Parameter(Mandatory)]
-        [ValidateSet('dev', 'tst', 'bus', 'root')]
-        [string]
-        $Env,
-
-        [switch]
-        $LogintoGraphasSPN
-    )
-
-    if ($dev)
-    {
-        $cred = Import-Clixml 'C:\Users\Kiran.K.Reddy2\OneDrive - Shell\cr\dev_spn.xml'
-    }
-
-    switch ($env)
-    {
-        'dev' { $cred = Import-Clixml 'C:\Users\Kiran.K.Reddy2\OneDrive - Shell\cr\dev_spn.xml' }
-        'tst' { $cred = Import-Clixml 'C:\Users\Kiran.K.Reddy2\OneDrive - Shell\cr\tst_spn.xml' }
-        'bus' { $cred = Import-Clixml 'C:\Users\Kiran.K.Reddy2\OneDrive - Shell\cr\bus_spn.xml' }
-        'root' { $cred = Import-Clixml 'C:\Users\Kiran.K.Reddy2\OneDrive - Shell\cr\root_spn.xml' }
-
-    }
-
-    $tenantID = 'db1e96a8-a3da-442a-930b-235cac24cd5c'
-    Connect-AzAccount -TenantId $tenantID -Credential $cred -ServicePrincipal -WarningAction SilentlyContinue
-
-    if ($LogintoGraphasSPN)
-    {
-        $tenantid = 'db1e96a8-a3da-442a-930b-235cac24cd5c'
-
-        $body = @{
-            Grant_Type    = 'client_credentials'
-            Scope         = 'https://graph.microsoft.com/.default'
-            Client_Id     = $cred.UserName
-            Client_Secret = $cred.GetNetworkCredential().Password
-          }
-
-          $connection = Invoke-RestMethod `
-            -Uri https://login.microsoftonline.com/$tenantid/oauth2/v2.0/token `
-            -Method POST `
-            -Body $body
-
-          $token = $connection.access_token
-          $null = Connect-MgGraph -AccessToken $token
-    }
-    else
-    {
-        Connect-MgGraph
-    }
-    Get-MgContext
-
+    (op item create --category password --generate-password=18,letters,digits,symbols --dry-run --format json | ConvertFrom-Json).fields.value
 }
+
 
 function Update-AllModules
 {
@@ -139,8 +85,6 @@ function Update-AllModules
     }
 }
 
-$dpcoe = 'ed0c2f5b-069b-412f-bf32-7a21255f8dac'
-$tenantid = 'db1e96a8-a3da-442a-930b-235cac24cd5c'
 
 [console]::InputEncoding = [console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 

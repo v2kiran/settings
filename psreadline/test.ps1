@@ -1,1 +1,0 @@
-Get-Service -Name BITS -Verbose -ErrorAction Stop
